@@ -61,54 +61,50 @@ last_name.oninput = (e) => {
 };
 
 const email = document.getElementById(email_id);
-email.oninput = (e) => {
-  setFormValue(email_id, e.target.value, validateEmail)
+// Обработчик для поля email с валидацией и проверкой формы
+email.oninput = (event) => {
+  setFormValue(email_id, event.target.value, validateEmail);
   checkFormValidity();
-} // Установить значение с валидацией
+};
 
-const password = document.getElementById(password_id);
-password.oninput = (e) => {
-  setFormValue(password_id, e.target.value, validatePassword);
+// Обработчик для поля пароля с валидацией и проверкой формы
+password.oninput = (event) => {
+  setFormValue(password_id, event.target.value, validatePassword);
   checkFormValidity();
-}
+};
 
-const password_repeat = document.getElementById(password_repeat_id);
-password_repeat.oninput = (e) => {
-  setFormValue(password_repeat_id, e.target.value, validateRepeatPassword);
+// Обработчик для повторного ввода пароля
+password_repeat.oninput = (event) => {
+  setFormValue(password_repeat_id, event.target.value, validateRepeatPassword);
   checkFormValidity();
-}
+};
 
-const onPasswordChange = (e) => {
-  if (!validatePassword(password.value)) {
-    password.classList.remove("valid")
-    password.classList.add("invalid")
-  } else {
-    password.classList.remove("invalid")
-    password.classList.add("valid")
-  }
-  onRepeatPasswordChange(e);
-}
+// Проверка валидности пароля и обновление классов
+const onPasswordChange = () => {
+  const isPasswordValid = validatePassword(password.value);
+  password.classList.toggle("valid", isPasswordValid);
+  password.classList.toggle("invalid", !isPasswordValid);
+  onRepeatPasswordChange();
+};
 
-const onRepeatPasswordChange = (e) => {
-  if (password.value !== password_repeat.value) {
-    password_repeat.classList.remove("valid")
-    password_repeat.classList.add("invalid")
-  } else {
-    password_repeat.classList.remove("invalid")
-    password_repeat.classList.add("valid")
-  }
-}
+// Проверка совпадения паролей
+const onRepeatPasswordChange = () => {
+  const isMatching = password.value === password_repeat.value;
+  password_repeat.classList.toggle("valid", isMatching);
+  password_repeat.classList.toggle("invalid", !isMatching);
+};
 
-password.addEventListener('change', onPasswordChange)
-password_repeat.addEventListener('change', onRepeatPasswordChange)
+// События изменения для полей паролей
+password.addEventListener("change", onPasswordChange);
+password_repeat.addEventListener("change", onRepeatPasswordChange);
 
+// Проверка общей валидности формы и управление кнопкой отправки
 function checkFormValidity() {
-  const isValid = getValidationStatus();
+  const isFormValid = getValidationStatus();
   const submitButton = document.getElementById(sign_up_btn_id);
-  submitButton.disabled = !isValid;
-  console.log('Form is valid:', isValid);
+  submitButton.disabled = !isFormValid;
+  console.log("Form is valid:", isFormValid);
 }
-
 // Меняем стили объекта DOM дерева. Это позволяет скрыть форму регистрации и показать форму авторизации
 // Объект формы не исключается из DOM дерева, а просто становится невидимым
 
